@@ -517,7 +517,9 @@
                             <i class="fas fa-calendar-days"></i>
                             Tanggal Pinjam
                         </span>
-                        <span class="detail-value">{{ $borrowing->tanggal_pinjam }}</span>
+                        <span class="detail-value">
+                            {{ \Carbon\Carbon::parse($borrowing->tanggal_pinjam)->translatedFormat('d F Y') }}
+                        </span>
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">
