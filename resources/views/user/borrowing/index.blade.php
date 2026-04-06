@@ -166,7 +166,7 @@
         .content { padding: 36px; flex: 1; }
 
         .page-hero {
-            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 45%, #3730a3 100%);
+            background: linear-gradient(135deg, #064e3b 0%, #059669 45%, #10b981 100%);
             border-radius: 20px;
             padding: 30px 36px;
             margin-bottom: 28px;

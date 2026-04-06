@@ -215,7 +215,6 @@
         <a href="{{ url('petugas/books') }}" class="nav-link"><i class="fas fa-book"></i> Kelola Buku</a>
         <div class="nav-label">Menu Tambahan</div>
         <a href="{{ route('petugas.borrowings.index') }}" class="nav-link active"><i class="fas fa-handshake"></i> Riwayat Peminjaman</a>
-        <a href="#" class="nav-link"><i class="fas fa-file-download"></i> Generate Laporan</a>
     </nav>
     <div class="sidebar-footer">
         <form method="POST" action="{{ route('logout') }}">

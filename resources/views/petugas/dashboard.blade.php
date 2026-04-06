@@ -413,9 +413,6 @@
         <a href="{{ route('petugas.borrowings.index') }}" class="nav-link">
             <i class="fas fa-handshake"></i> Riwayat Peminjaman
         </a>
-        <a href="#" class="nav-link">
-            <i class="fas fa-file-download"></i> Generate Laporan
-        </a>
     </nav>
 
     <div class="sidebar-footer">
