@@ -31,36 +31,6 @@ class AdminRatingController extends Controller
         $rating->load(['user', 'book']);
         return view('admin.ratings.show', compact('rating'));
     }
-
-    // ==============================
-    // FORM EDIT ULASAN
-    // ==============================
-    public function edit(Rating $rating)
-    {
-        $rating->load(['user', 'book']);
-        return view('admin.ratings.edit', compact('rating'));
-    }
-
-    // ==============================
-    // UPDATE ULASAN
-    // ==============================
-    public function update(Request $request, Rating $rating)
-    {
-        $request->validate([
-            'rating' => 'required|integer|min:1|max:5',
-            'ulasan' => 'nullable|string|max:1000'
-        ]);
-
-        $rating->update([
-            'rating' => $request->rating,
-            'ulasan' => $request->ulasan
-        ]);
-
-        return redirect()
-            ->route('admin.ratings.index')
-            ->with('success', 'Ulasan berhasil diperbarui');
-    }
-
     // ==============================
     // HAPUS ULASAN (OPSIONAL)
     // ==============================

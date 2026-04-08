@@ -530,9 +530,6 @@
                                 <a href="{{ route('admin.ratings.show', $rating->id) }}" class="btn-action btn-detail" title="Lihat Detail">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a href="{{ route('admin.ratings.edit', $rating->id) }}" class="btn-action btn-edit" title="Edit">
-                                    <i class="fas fa-pen"></i>
-                                </a>
                                 <form method="POST" action="{{ route('admin.ratings.destroy', $rating->id) }}" style="display:inline"
                                       onsubmit="return confirm('Hapus ulasan ini?')">
                                     @csrf

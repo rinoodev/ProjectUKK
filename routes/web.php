@@ -131,12 +131,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         Route::get('/ratings/{rating}', [AdminRatingController::class, 'show'])
             ->name('ratings.show');
 
-        Route::get('/ratings/{rating}/edit', [AdminRatingController::class, 'edit'])
-            ->name('ratings.edit');
-
-        Route::put('/ratings/{rating}', [AdminRatingController::class, 'update'])
-            ->name('ratings.update');
-
         Route::delete('/ratings/{rating}', [AdminRatingController::class, 'destroy'])
             ->name('ratings.destroy');
 });
