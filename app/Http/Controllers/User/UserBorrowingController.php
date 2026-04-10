@@ -7,6 +7,7 @@ use App\Models\Borrowing;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use DateTime;
 
 class UserBorrowingController extends Controller
 {
@@ -28,7 +29,21 @@ class UserBorrowingController extends Controller
 
         $request->validate([
             'tanggal_pinjam' => 'required|date',
-            'due_date' => 'required|date|after_or_equal:tanggal_pinjam',
+            'due_date' => [
+                'required',
+                'date',
+                'after_or_equal:tanggal_pinjam',
+                function ($attribute, $value, $fail) use ($request) {
+                    $tanggalPinjam = new DateTime($request->tanggal_pinjam);
+                    $dueDate = new DateTime($value);
+                    $maxDate = clone $tanggalPinjam;
+                    $maxDate->modify('+7 days');
+
+                    if ($dueDate > $maxDate) {
+                        $fail('Tanggal pengembalian maksimal 7 hari setelah tanggal pinjam.');
+                    }
+                },
+            ],
         ]);
 
         Borrowing::create([

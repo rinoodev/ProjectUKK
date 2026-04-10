@@ -761,7 +761,7 @@
                                 <i class="fas fa-calendar-day" style="color:var(--indigo); margin-right:5px;"></i>
                                 Tanggal Pinjam
                             </label>
-                            <input type="date" name="tanggal_pinjam" value="{{ date('Y-m-d') }}" class="field-input">
+                            <input type="date" name="tanggal_pinjam" id="tanggal_pinjam" value="{{ date('Y-m-d') }}" class="field-input">
                         </div>
 
                         <div class="field-group">
@@ -769,7 +769,7 @@
                                 <i class="fas fa-calendar-check" style="color:var(--indigo); margin-right:5px;"></i>
                                 Tanggal Kembali
                             </label>
-                            <input type="date" name="due_date" min="{{ date('Y-m-d', strtotime('+1 day')) }}" class="field-input">
+                            <input type="date" name="due_date" id="due_date" class="field-input">
                         </div>
 
                         <div class="warning-box">
@@ -935,6 +935,44 @@ document.getElementById('ratingForm')?.addEventListener('submit', function(e) {
             location.reload();
         }
     });
+});
+
+// Handle tanggal pinjam dan kembali
+document.getElementById('tanggal_pinjam').addEventListener('change', function() {
+    const tanggalPinjam = new Date(this.value);
+    const dueDateInput = document.getElementById('due_date');
+
+    if (tanggalPinjam) {
+        // Minimal tanggal kembali: 1 hari setelah pinjam
+        const minDate = new Date(tanggalPinjam);
+        minDate.setDate(minDate.getDate() + 1);
+
+        // Maksimal tanggal kembali: 7 hari setelah pinjam
+        const maxDate = new Date(tanggalPinjam);
+        maxDate.setDate(maxDate.getDate() + 7);
+
+        // Format ke YYYY-MM-DD
+        const minDateStr = minDate.toISOString().split('T')[0];
+        const maxDateStr = maxDate.toISOString().split('T')[0];
+
+        dueDateInput.min = minDateStr;
+        dueDateInput.max = maxDateStr;
+
+        // Reset nilai jika tidak valid
+        if (dueDateInput.value) {
+            const currentDueDate = new Date(dueDateInput.value);
+            if (currentDueDate < minDate || currentDueDate > maxDate) {
+                dueDateInput.value = '';
+            }
+        }
+    }
+});
+
+// Set initial constraints saat halaman load
+document.addEventListener('DOMContentLoaded', function() {
+    const tanggalPinjamInput = document.getElementById('tanggal_pinjam');
+    const event = new Event('change');
+    tanggalPinjamInput.dispatchEvent(event);
 });
 </script>
 </body>
