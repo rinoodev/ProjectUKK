@@ -509,10 +509,12 @@
 
                 <!-- Pills: Kategori + ISBN -->
                 <div class="pills-row">
-                    @if($book->category)
-                        <span class="pill pill-blue">
-                            <i class="fas fa-tag"></i> {{ $book->category->nama }}
-                        </span>
+                    @if($book->categories->count() > 0)
+                        @foreach($book->categories as $category)
+                            <span class="pill pill-blue">
+                                <i class="fas fa-tag"></i> {{ $category->nama }}
+                            </span>
+                        @endforeach
                     @else
                         <span class="pill" style="background:#f9fafb; color:var(--muted); border-color:var(--border)">
                             <i class="fas fa-exclamation-circle"></i> Tanpa Kategori

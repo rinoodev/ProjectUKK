@@ -676,7 +676,13 @@
                         <div class="meta-icon"><i class="fas fa-tag"></i></div>
                         <div>
                             <div class="meta-label">Kategori</div>
-                            <div class="meta-value">{{ $book->kategori->nama ?? $book->KategoriID ?? 'Umum' }}</div>
+                            <div class="meta-value">
+                                @if($book->categories->count() > 0)
+                                    {{ $book->categories->pluck('nama')->join(', ') }}
+                                @else
+                                    Umum
+                                @endif
+                            </div>
                         </div>
                     </div>
 

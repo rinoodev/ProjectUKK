@@ -170,6 +170,62 @@
         .btn-cancel { background: var(--bg); color: var(--text); border: 1.5px solid var(--border); }
         .btn-cancel:hover { background: #e5e7eb; }
 
+        /* Checkbox group */
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 12px;
+            background: var(--bg);
+            border-radius: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 1.5px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            background: var(--surface);
+            transition: all .15s;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .checkbox-item input[type="checkbox"]:hover {
+            border-color: var(--accent);
+        }
+
+        .checkbox-item input[type="checkbox"]:checked {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .checkbox-item input[type="checkbox"]:checked::after {
+            content: '✔';
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .checkbox-label {
+            font-size: 13.5px;
+            color: var(--text);
+            cursor: pointer;
+            user-select: none;
+            margin: 0;
+        }
+
         /* Cover preview card */
         .preview-card { position: sticky; top: 36px; }
         .preview-img-wrap {
@@ -298,17 +354,20 @@
                     <!-- Kategori -->
                     <div class="field">
                         <div class="field-label"><i class="fas fa-tags"></i> Kategori Buku</div>
-                        <div class="select-wrap input-wrap">
-                            <i class="fas fa-tags input-icon"></i>
-                            <select name="KategoriID" required>
-                                <option value="">-- Pilih Kategori --</option>
-                                @foreach($categories as $category)
-                                    <option value="{{ $category->id }}"
-                                        {{ old('KategoriID') == $category->id ? 'selected' : '' }}>
+                        <div class="checkbox-group">
+                            @forelse($categories as $category)
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="kategori_{{ $category->id }}"
+                                           name="kategori_id[]"
+                                           value="{{ $category->id }}"
+                                           {{ in_array($category->id, old('kategori_id', [])) ? 'checked' : '' }}>
+                                    <label for="kategori_{{ $category->id }}" class="checkbox-label">
                                         {{ $category->nama }}
-                                    </option>
-                                @endforeach
-                            </select>
+                                    </label>
+                                </div>
+                            @empty
+                                <p style="color: var(--muted); font-size: 13px;">Tidak ada kategori tersedia</p>
+                            @endforelse
                         </div>
                     </div>
 

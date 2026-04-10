@@ -48,6 +48,17 @@ public function category()
         return $this->belongsTo(Category::class, 'KategoriID');
     }
 
+    // Relasi many-to-many ke categories
+    public function categories()
+    {
+        return $this->belongsToMany(
+            Category::class,
+            'kategori_relasi',
+            'book_id',
+            'category_id'
+        )->withTimestamps();
+    }
+
 
 
 }

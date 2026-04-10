@@ -189,10 +189,12 @@
                     <div class="book-title">{{ $book->judul }}</div>
 
                     <div class="badge-row">
-                        @if ($book->category)
-                            <span class="badge badge-green">
-                                <i class="fas fa-tag"></i> {{ $book->category->nama }}
-                            </span>
+                        @if ($book->categories->count() > 0)
+                            @foreach($book->categories as $category)
+                                <span class="badge badge-green">
+                                    <i class="fas fa-tag"></i> {{ $category->nama }}
+                                </span>
+                            @endforeach
                         @else
                             <span class="badge" style="background:var(--bg);color:var(--muted);border:1px solid var(--border)">
                                 <i class="fas fa-exclamation-circle"></i> Tidak ada kategori

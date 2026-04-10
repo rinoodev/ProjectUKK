@@ -510,11 +510,15 @@
                         </td>
 
                         <td>
-                            @if($book->category)
-                                <span class="cat-badge">
-                                    <i class="fas fa-tag" style="font-size:10px"></i>
-                                    {{ $book->category->nama }}
-                                </span>
+                            @if($book->categories->count() > 0)
+                                <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                                    @foreach($book->categories as $category)
+                                        <span class="cat-badge">
+                                            <i class="fas fa-tag" style="font-size:10px"></i>
+                                            {{ $category->nama }}
+                                        </span>
+                                    @endforeach
+                                </div>
                             @else
                                 <span style="color:var(--muted); font-size:12px">—</span>
                             @endif

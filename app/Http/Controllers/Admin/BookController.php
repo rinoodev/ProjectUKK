@@ -15,7 +15,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::with('category')->latest()->get();
+        $books = Book::with('categories')->latest()->get();
         return view('admin.books.index', compact('books'));
     }
 
@@ -40,7 +40,8 @@ class BookController extends Controller
             'penerbit'   => 'required|string|max:255',
             'tahun'      => 'required|digits:4',
             'stok'       => 'required|integer|min:0',
-            'KategoriID' => 'required|exists:categories,id',
+            'kategori_id' => 'required|array|min:1',
+            'kategori_id.*' => 'exists:categories,id',
             'deskripsi'  => 'nullable|string',
             'image'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
@@ -50,17 +51,20 @@ class BookController extends Controller
             $imagePath = $request->file('image')->store('books', 'public');
         }
 
-        Book::create([
+        $book = Book::create([
             'kode_buku'  => $request->kode_buku,
             'judul'      => $request->judul,
             'penulis'    => $request->penulis,
             'penerbit'   => $request->penerbit,
             'tahun'      => $request->tahun,
             'stok'       => $request->stok,
-            'KategoriID' => $request->KategoriID,
+            'KategoriID' => $request->kategori_id[0],
             'deskripsi'  => $request->deskripsi,
             'image'      => $imagePath,
         ]);
+
+        // Sync categories
+        $book->categories()->sync($request->kategori_id);
 
         return redirect()
             ->route('admin.books.index')
@@ -72,7 +76,7 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        $book->load('category');
+        $book->load('categories');
         return view('admin.books.show', compact('book'));
     }
 
@@ -97,7 +101,8 @@ class BookController extends Controller
             'penerbit'   => 'required|string|max:255',
             'tahun'      => 'required|digits:4',
             'stok'       => 'required|integer|min:0',
-            'KategoriID' => 'required|exists:categories,id',
+            'kategori_id' => 'required|array|min:1',
+            'kategori_id.*' => 'exists:categories,id',
             'deskripsi'  => 'nullable|string',
             'image'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
@@ -116,10 +121,13 @@ class BookController extends Controller
             'penerbit'   => $request->penerbit,
             'tahun'      => $request->tahun,
             'stok'       => $request->stok,
-            'KategoriID' => $request->KategoriID,
+            'KategoriID' => $request->kategori_id[0],
             'deskripsi'  => $request->deskripsi,
             'image'      => $book->image,
         ]);
+
+        // Sync categories
+        $book->categories()->sync($request->kategori_id);
 
         return redirect()
             ->route('admin.books.index')

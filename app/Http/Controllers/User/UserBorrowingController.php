@@ -12,6 +12,7 @@ class UserBorrowingController extends Controller
 {
     public function create(Book $book)
     {
+        $book->load('categories');
         return view('user.borrow.create', compact('book'));
     }
 

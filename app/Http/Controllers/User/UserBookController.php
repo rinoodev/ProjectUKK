@@ -8,14 +8,14 @@ use App\Models\Borrowing;
 class UserBookController extends Controller
 {
     public function index()
-{
-    $books = Book::with('kategori')->get();
+    {
+        $books = Book::with('categories')->get();
 
-    // pinjaman aktif user (pending / approved / dipinjam)
-    $activeBorrowing = Borrowing::where('user_id', auth()->id())
-        ->whereIn('status', ['pending', 'approved', 'dipinjam'])
-        ->first();
+        // pinjaman aktif user (pending / approved / dipinjam)
+        $activeBorrowing = Borrowing::where('user_id', auth()->id())
+            ->whereIn('status', ['pending', 'approved', 'dipinjam'])
+            ->first();
 
-    return view('user.books', compact('books', 'activeBorrowing'));
-}
+        return view('user.books', compact('books', 'activeBorrowing'));
+    }
 }

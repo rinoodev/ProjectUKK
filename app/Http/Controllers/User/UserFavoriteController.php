@@ -11,16 +11,15 @@ class UserFavoriteController extends Controller
 {
 
 public function index()
-{
-    $favorites = Favorite::where('user_id', auth()->id())
-        ->with('book')
-        ->get();
+    {
+        $favorites = Favorite::where('user_id', auth()->id())
+            ->with('book.categories')
+            ->get();
 
-    $categories = Category::select('id', 'nama')->get();
+        $categories = Category::select('id', 'nama')->get();
 
-    return view('user.favorites', compact('favorites', 'categories'));
-}
-
+        return view('user.favorites', compact('favorites', 'categories'));
+    }
 
     public function store(Book $book)
     {

@@ -12,4 +12,15 @@ class Category extends Model
     {
         return $this->hasMany(Book::class, 'KategoriID');
     }
+
+    // Relasi many-to-many ke books (dua jalur)
+    public function booksRelated()
+    {
+        return $this->belongsToMany(
+            Book::class,
+            'kategori_relasi',
+            'category_id',
+            'book_id'
+        )->withTimestamps();
+    }
 }

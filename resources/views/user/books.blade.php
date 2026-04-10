@@ -611,7 +611,15 @@
                     <h3 class="book-title">{{ $book->judul }}</h3>
                     <p class="book-author">{{ $book->penulis }}</p>
 
-                    <span class="book-category">{{ $book->kategori->nama ?? 'Umum' }}</span>
+                    @if($book->categories->count() > 0)
+                        <div class="flex flex-wrap gap-1">
+                            @foreach($book->categories as $category)
+                                <span class="book-category">{{ $category->nama }}</span>
+                            @endforeach
+                        </div>
+                    @else
+                        <span class="book-category">Umum</span>
+                    @endif
 
                     <!-- Rating -->
                     <div class="rating-row">

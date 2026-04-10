@@ -12,7 +12,7 @@ class BookController extends Controller
 {
     public function index()
     {
-        $books = Book::with('category')->latest()->get();
+        $books = Book::with('categories')->latest()->get();
         return view('petugas.books.index', compact('books'));
     }
 
@@ -25,12 +25,15 @@ class BookController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'kode_buku'  => 'required|string|max:50|unique:books,kode_buku',
             'judul'      => 'required',
             'penulis'    => 'required',
             'penerbit'   => 'required',
-            'KategoriID' => 'required|exists:categories,id',
+            'kategori_id' => 'required|array|min:1',
+            'kategori_id.*' => 'exists:categories,id',
             'tahun'      => 'required|numeric',
             'stok'       => 'required|numeric',
+            'deskripsi'  => 'nullable|string',
             'image'      => 'nullable|image|max:2048',
         ]);
 
@@ -39,15 +42,20 @@ class BookController extends Controller
             $imagePath = $request->file('image')->store('books', 'public');
         }
 
-        Book::create([
+        $book = Book::create([
+            'kode_buku'  => $request->kode_buku,
             'judul'      => $request->judul,
             'penulis'    => $request->penulis,
             'penerbit'   => $request->penerbit,
-            'KategoriID' => $request->KategoriID, // ✅ FIX
+            'KategoriID' => $request->kategori_id[0], // Keep for backward compatibility
             'tahun'      => $request->tahun,
             'stok'       => $request->stok,
+            'deskripsi'  => $request->deskripsi,
             'image'      => $imagePath,
         ]);
+
+        // Sync categories
+        $book->categories()->sync($request->kategori_id);
 
         return redirect()
             ->route('petugas.books.index')
@@ -56,6 +64,7 @@ class BookController extends Controller
 
     public function show(Book $book)
     {
+        $book->load('categories');
         return view('petugas.books.show', compact('book'));
     }
 
@@ -68,12 +77,15 @@ class BookController extends Controller
     public function update(Request $request, Book $book)
     {
         $request->validate([
+            'kode_buku'  => 'required|string|max:50|unique:books,kode_buku,' . $book->id,
             'judul'      => 'required',
             'penulis'    => 'required',
             'penerbit'   => 'required',
-            'KategoriID' => 'required|exists:categories,id',
+            'kategori_id' => 'required|array|min:1',
+            'kategori_id.*' => 'exists:categories,id',
             'tahun'      => 'required|numeric',
             'stok'       => 'required|numeric',
+            'deskripsi'  => 'nullable|string',
             'image'      => 'nullable|image|max:2048',
         ]);
 
@@ -85,13 +97,18 @@ class BookController extends Controller
         }
 
         $book->update([
+            'kode_buku'  => $request->kode_buku,
             'judul'      => $request->judul,
             'penulis'    => $request->penulis,
             'penerbit'   => $request->penerbit,
-            'KategoriID' => $request->KategoriID,
+            'KategoriID' => $request->kategori_id[0], // Keep for backward compatibility
             'tahun'      => $request->tahun,
             'stok'       => $request->stok,
+            'deskripsi'  => $request->deskripsi,
         ]);
+
+        // Sync categories
+        $book->categories()->sync($request->kategori_id);
 
         return redirect()
             ->route('petugas.books.index')

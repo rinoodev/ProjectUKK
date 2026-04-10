@@ -537,7 +537,15 @@
                     <h3 class="book-title">{{ $fav->book->judul }}</h3>
                     <p class="book-author">{{ $fav->book->penulis }}</p>
 
-                    <span class="book-category" data-kategori="{{ $fav->book->KategoriID }}">Umum</span>
+                    @if($fav->book->categories->count() > 0)
+                        <div class="flex flex-wrap gap-1">
+                            @foreach($fav->book->categories as $category)
+                                <span class="book-category">{{ $category->nama }}</span>
+                            @endforeach
+                        </div>
+                    @else
+                        <span class="book-category">Umum</span>
+                    @endif
 
                     <div style="flex:1;"></div>
 
@@ -575,13 +583,6 @@
 </div><!-- end .main-wrap -->
 
 
-<script>
-    const categoryMap = @json($categories->pluck('nama', 'id'));
 
-    document.querySelectorAll('[data-kategori]').forEach(el => {
-        const id = el.dataset.kategori;
-        el.textContent = categoryMap[id] ?? 'Umum';
-    });
-</script>
 </body>
 </html>
